@@ -1,0 +1,9 @@
+Package: com.christopher.olympus
+Name: Olympus
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Quick lockscreen app launcher
+Maintainer: Christopher Anderson
+Author: Christopher Anderson
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
