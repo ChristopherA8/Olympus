@@ -2,7 +2,6 @@
 
 /*
 Rundown: we generate new lockscreen pages from an array of app bundle ids.
-
 */
 
 // Cover Sheet page subclass
