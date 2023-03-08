@@ -104,11 +104,8 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 
 - (void)didTransitionToVisible:(BOOL)arg0 {
   %orig;
-  NSLog(@"[CSRE] didTransition");
   if (!arg0)
     return;
-  appToLaunch = self.bundleID; // Set the bundle id that should be launching
-                               // when timer is over
   launchTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
                                                  target:self
                                                selector:@selector(launchApp)
@@ -119,6 +116,7 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 - (void)viewWillAppear:(BOOL)animated {
   %orig;
 
+  allowTodayView = NO;
   [self.appIconView setAlpha:1.0];
   [self.appLabel setAlpha:1.0];
 
@@ -168,24 +166,20 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
       unlockUIFromSource:17
              withOptions:nil];
   if (!success) {
-    NSLog(@"[CSRE] Failed to unlock device");
+    NSLog(@"[OLYMPUS] Failed to unlock device");
     return;
   }
-  self.appIconView.alpha = 0.0;
-  [[UIApplication sharedApplication] launchApplicationWithIdentifier:appToLaunch
-                                                           suspended:NO];
+  [[UIApplication sharedApplication]
+      launchApplicationWithIdentifier:self.bundleID
+                            suspended:NO];
 }
 %end
 
-//! Todo: instead of disabling today view
-//! CHECK PAGE INDEX IF WE'RE ON MAIN PAGE AND ALLOW TODAY VIEW SWIPE
-
 // This class in in charge of laying out the pages
 // The two default pages are the camera and main page with your notifications on
-// it (today view is a separate overlay now I think cause it's not in this
+// it
+// (the today view is a separate overlay now I think cause it's not in this
 // array)
-@interface CSCoverSheetViewController : UIViewController
-@end
 
 %hook CSCoverSheetViewController
 - (id)initWithPageViewControllers:(id)arg0
@@ -206,7 +200,8 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   // for it)
   [pages removeLastObject];
 
-  for (int i = 0; i < apps.count; i++) { // For each app create a new page
+  // For each app bundleID create a new page
+  for (int i = 0; i < apps.count; i++) {
     NSString *bundleID = apps[i];
     OlympusPageViewController *pageViewController =
         [[%c(OlympusPageViewController) alloc] init];
@@ -217,14 +212,21 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 }
 %end
 
-// Disable today view because it presents itself everytime you try to swipe back
-// a page
-%hook SBMainDisplayPolicyAggregator
-- (BOOL)_allowsCapabilityLockScreenTodayViewWithExplanation:(id)arg0 {
-  return NO;
+// If we're on the main lockscreen page, allow scrolling to today view to open
+%hook CSMainPageContentViewController
+- (void)viewDidAppear:(BOOL)animated {
+  %orig;
+  allowTodayView = YES;
 }
 %end
 
+// Disable today view if we're not on main lockscreen page
+%hook SBMainDisplayPolicyAggregator
+- (BOOL)_allowsCapabilityLockScreenTodayViewWithExplanation:(id)arg0 {
+  return allowTodayView;
+}
+%end
+
+// Preference values and setup
 %ctor {
-  NSLog(@"[CSRE] Log test");
 }

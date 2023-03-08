@@ -5,8 +5,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-NSString *appToLaunch;
 NSTimer *launchTimer;
+BOOL allowTodayView;
 
 @interface SBLockScreenManager
 + (id)sharedInstance;
@@ -27,6 +27,9 @@ NSTimer *launchTimer;
 - (BOOL)authenticated;
 - (void)willTransitionToVisible:(BOOL)arg0;
 - (void)didTransitionToVisible:(BOOL)arg0;
+@end
+
+@interface CSCoverSheetViewController : UIViewController
 @end
 
 @interface OlympusPageViewController : CSPageViewController
