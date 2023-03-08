@@ -164,8 +164,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 
 %new
 - (void)launchApp {
-  // NSLog(@"[CSRE] launch %@", appToLaunch);
-  // openApp(); // Prompt device to unlock and launch app
   bool success = [[%c(SBLockScreenManager) sharedInstance]
       unlockUIFromSource:17
              withOptions:nil];
@@ -176,24 +174,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   self.appIconView.alpha = 0.0;
   [[UIApplication sharedApplication] launchApplicationWithIdentifier:appToLaunch
                                                            suspended:NO];
-}
-%end
-
-// Credit: MegaDev from JellyLock-Reborn
-%hook SBDashBoardBiometricUnlockController
-- (void)setAuthenticated:(BOOL)authenticated {
-  %orig;
-  if (authenticated && appToLaunch != nil) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC),
-                   dispatch_get_main_queue(), ^{
-                     [[UIApplication sharedApplication]
-                         launchApplicationWithIdentifier:appToLaunch
-                                               suspended:NO];
-                     appToLaunch =
-                         nil; // Reset, so we don't start launching apps
-                              // randomly when we put in our password
-                   });
-  }
 }
 %end
 
