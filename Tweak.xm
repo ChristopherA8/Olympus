@@ -60,54 +60,66 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 }
 
 - (void)viewDidLoad {
-	%orig;
+  %orig;
 
-	self.appIconView = [[UIImageView alloc] initWithImage:[UIImage _applicationIconImageForBundleIdentifier:self.bundleID format:3 scale:[[UIScreen mainScreen] scale]]];
-	self.appIconView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.appIconView setAlpha:1.0];
-	[self.view addSubview:self.appIconView];
+  self.appIconView = [[UIImageView alloc]
+      initWithImage:[UIImage
+                        _applicationIconImageForBundleIdentifier:self.bundleID
+                                                          format:3
+                                                           scale:[[UIScreen
+                                                                     mainScreen]
+                                                                     scale]]];
+  self.appIconView.translatesAutoresizingMaskIntoConstraints = NO;
+  [self.appIconView setAlpha:1.0];
+  [self.view addSubview:self.appIconView];
 
-	[NSLayoutConstraint activateConstraints:@[
-		[self.appIconView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-		[self.appIconView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
-		[self.appIconView.widthAnchor constraintEqualToConstant:100],
-		[self.appIconView.heightAnchor constraintEqualToConstant:100],
-	]];
+  [NSLayoutConstraint activateConstraints:@[
+    [self.appIconView.centerXAnchor
+        constraintEqualToAnchor:self.view.centerXAnchor],
+    [self.appIconView.centerYAnchor
+        constraintEqualToAnchor:self.view.centerYAnchor],
+    [self.appIconView.widthAnchor constraintEqualToConstant:100],
+    [self.appIconView.heightAnchor constraintEqualToConstant:100],
+  ]];
 
+  // add a toggle for app labels or nah
+  self.appLabel = [[UILabel alloc] init];
+  self.appLabel.translatesAutoresizingMaskIntoConstraints = NO;
+  self.appLabel.text = [[LSApplicationProxy
+      applicationProxyForIdentifier:self.bundleID] localizedNameForContext:nil];
+  self.appLabel.textColor = [UIColor whiteColor];
+  self.appLabel.textAlignment = NSTextAlignmentCenter;
+  self.appLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightRegular];
+  [self.view addSubview:self.appLabel];
 
-	// add a toggle for app labels or nah
-	self.appLabel = [[UILabel alloc] init];
-	self.appLabel.translatesAutoresizingMaskIntoConstraints = NO;
-	self.appLabel.text = [[LSApplicationProxy applicationProxyForIdentifier:self.bundleID] localizedNameForContext:nil];
-	self.appLabel.textColor = [UIColor whiteColor];
-	self.appLabel.textAlignment = NSTextAlignmentCenter;
-	self.appLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightRegular];
-	[self.view addSubview:self.appLabel];
-
-	[NSLayoutConstraint activateConstraints:@[
-		[self.appLabel.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-		[self.appLabel.topAnchor constraintEqualToAnchor:self.appIconView.bottomAnchor constant:10],
-		[self.appLabel.widthAnchor constraintEqualToConstant:200],
-		[self.appLabel.heightAnchor constraintEqualToConstant:30],
-	]];
+  [NSLayoutConstraint activateConstraints:@[
+    [self.appLabel.centerXAnchor
+        constraintEqualToAnchor:self.view.centerXAnchor],
+    [self.appLabel.topAnchor
+        constraintEqualToAnchor:self.appIconView.bottomAnchor
+                       constant:10],
+    [self.appLabel.widthAnchor constraintEqualToConstant:200],
+    [self.appLabel.heightAnchor constraintEqualToConstant:30],
+  ]];
 }
 
 - (void)didTransitionToVisible:(BOOL)arg0 {
   %orig;
   NSLog(@"[CSRE] didTransition");
-  if (!arg0) return;
+  if (!arg0)
+    return;
   appToLaunch = self.bundleID; // Set the bundle id that should be launching
-                                // when timer is over
+                               // when timer is over
   launchTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
-                                                  target:self
-                                                selector:@selector(launchApp)
-                                                userInfo:nil
+                                                 target:self
+                                               selector:@selector(launchApp)
+                                               userInfo:nil
                                                 repeats:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   %orig;
-  
+
   [self.appIconView setAlpha:1.0];
   [self.appLabel setAlpha:1.0];
 
@@ -127,10 +139,10 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
     [UIView animateWithDuration:3.0
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
-                    animations:^{
-                      [self.appIconView setAlpha:0.0];
-                    }
-                    completion:nil];
+                     animations:^{
+                       [self.appIconView setAlpha:0.0];
+                     }
+                     completion:nil];
   }
 }
 
@@ -155,13 +167,16 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 - (void)launchApp {
   // NSLog(@"[CSRE] launch %@", appToLaunch);
   // openApp(); // Prompt device to unlock and launch app
-  bool success = [[%c(SBLockScreenManager) sharedInstance] unlockUIFromSource:17 withOptions:nil];
+  bool success = [[%c(SBLockScreenManager) sharedInstance]
+      unlockUIFromSource:17
+             withOptions:nil];
   if (!success) {
     NSLog(@"[CSRE] Failed to unlock device");
     return;
   }
   self.appIconView.alpha = 0.0;
-  [[UIApplication sharedApplication] launchApplicationWithIdentifier:appToLaunch suspended:NO];
+  [[UIApplication sharedApplication] launchApplicationWithIdentifier:appToLaunch
+                                                           suspended:NO];
 }
 %end
 
