@@ -5,17 +5,13 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 
 */
 
-void openApp() {
-  [[%c(SBLockScreenManager) sharedInstance] unlockUIFromSource:17
-                                                              withOptions:nil];
-}
-
 // Cover Sheet page subclass
 // (https://theapplewiki.com/wiki/Dev:CSPageViewController)
 %subclass OlympusPageViewController : CSPageViewController
 %property(nonatomic, retain) NSString *bundleID;
 %property(nonatomic, retain) UIImageView *appIconView;
 %property(nonatomic, retain) NSTimer *launchTimer;
+%property(nonatomic, retain) UILabel *appLabel;
 
 // Used for scrolling date/time and other elements away when you swipe the page
 - (void)aggregateAppearance:(CSAppearance *)arg0 {
@@ -63,67 +59,79 @@ void openApp() {
   [arg0 addComponent:quickActions];
 }
 
-- (void)aggregateBehavior:(CSBehavior *)arg0 {
-  %orig(arg0);
+- (void)viewDidLoad {
+	%orig;
 
-  //* setScrollingStrategy
-  // 3 = camera page behavior (horizontal scrolling disabled)
-  // 1 = idk
-  // 0 = idk
-  [arg0 setScrollingStrategy:0];
-  [arg0 setIdleTimerDuration:7];
-  [arg0 setIdleWarnMode:2];
-  [arg0 setIdleTimerMode:1];
+	self.appIconView = [[UIImageView alloc] initWithImage:[UIImage _applicationIconImageForBundleIdentifier:self.bundleID format:3 scale:[[UIScreen mainScreen] scale]]];
+	self.appIconView.translatesAutoresizingMaskIntoConstraints = NO;
+	[self.appIconView setAlpha:1.0];
+	[self.view addSubview:self.appIconView];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.appIconView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+		[self.appIconView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+		[self.appIconView.widthAnchor constraintEqualToConstant:100],
+		[self.appIconView.heightAnchor constraintEqualToConstant:100],
+	]];
+
+
+	// add a toggle for app labels or nah
+	self.appLabel = [[UILabel alloc] init];
+	self.appLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	self.appLabel.text = [[LSApplicationProxy applicationProxyForIdentifier:self.bundleID] localizedNameForContext:nil];
+	self.appLabel.textColor = [UIColor whiteColor];
+	self.appLabel.textAlignment = NSTextAlignmentCenter;
+	self.appLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightRegular];
+	[self.view addSubview:self.appLabel];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.appLabel.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+		[self.appLabel.topAnchor constraintEqualToAnchor:self.appIconView.bottomAnchor constant:10],
+		[self.appLabel.widthAnchor constraintEqualToConstant:200],
+		[self.appLabel.heightAnchor constraintEqualToConstant:30],
+	]];
 }
 
 - (void)didTransitionToVisible:(BOOL)arg0 {
   %orig;
   NSLog(@"[CSRE] didTransition");
-  if (arg0) {
-    appToLaunch = self.bundleID; // Set the bundle id that should be launching
-                                 // when timer is over
-    launchTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
-                                                   target:self
-                                                 selector:@selector(launchApp)
-                                                 userInfo:nil
-                                                  repeats:NO];
-  }
+  if (!arg0) return;
+  appToLaunch = self.bundleID; // Set the bundle id that should be launching
+                                // when timer is over
+  launchTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                  target:self
+                                                selector:@selector(launchApp)
+                                                userInfo:nil
+                                                repeats:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   %orig;
-  self.appIconView = [[UIImageView alloc]
-      initWithImage:[UIImage
-                        _applicationIconImageForBundleIdentifier:self.bundleID
-                                                          format:3
-                                                           scale:[[UIScreen
-                                                                     mainScreen]
-                                                                     scale]]];
-  self.appIconView.translatesAutoresizingMaskIntoConstraints = NO;
+  
   [self.appIconView setAlpha:1.0];
-  [self.view addSubview:self.appIconView];
+  [self.appLabel setAlpha:1.0];
 
-  [NSLayoutConstraint activateConstraints:@[
-    [self.appIconView.centerXAnchor
-        constraintEqualToAnchor:self.view.centerXAnchor],
-    [self.appIconView.centerYAnchor
-        constraintEqualToAnchor:self.view.centerYAnchor],
-    [self.appIconView.widthAnchor constraintEqualToConstant:100],
-    [self.appIconView.heightAnchor constraintEqualToConstant:100],
-  ]];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-  %orig;
-  // This animation is supposed to slowly fade the app icon as the timer counts
-  // down but it works half the time
   [UIView animateWithDuration:3.0
                         delay:0
                       options:UIViewAnimationOptionCurveLinear
                    animations:^{
                      [self.appIconView setAlpha:0.0];
+                     [self.appLabel setAlpha:0.0];
                    }
                    completion:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  %orig;
+  if (self.appIconView.alpha < 1.0 && self.appLabel.alpha < 1.0) {
+    [UIView animateWithDuration:3.0
+                          delay:0
+                        options:UIViewAnimationOptionCurveLinear
+                    animations:^{
+                      [self.appIconView setAlpha:0.0];
+                    }
+                    completion:nil];
+  }
 }
 
 // When we swipe to a new page we want to cancel the last page's animation and
@@ -131,19 +139,29 @@ void openApp() {
 - (void)viewWillDisappear:(BOOL)animated {
   %orig;
   [self.appIconView.layer removeAllAnimations];
+  [self.appIconView setAlpha:1.0];
+  [self.appLabel setAlpha:1.0];
   [launchTimer invalidate];
   launchTimer = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
   %orig;
-  self.appIconView = nil;
+  [self.appIconView setAlpha:0.0];
+  [self.appLabel setAlpha:0.0];
 }
 
 %new
 - (void)launchApp {
   // NSLog(@"[CSRE] launch %@", appToLaunch);
-  openApp(); // Prompt device to unlock and launch app
+  // openApp(); // Prompt device to unlock and launch app
+  bool success = [[%c(SBLockScreenManager) sharedInstance] unlockUIFromSource:17 withOptions:nil];
+  if (!success) {
+    NSLog(@"[CSRE] Failed to unlock device");
+    return;
+  }
+  self.appIconView.alpha = 0.0;
+  [[UIApplication sharedApplication] launchApplicationWithIdentifier:appToLaunch suspended:NO];
 }
 %end
 
