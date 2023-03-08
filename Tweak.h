@@ -36,8 +36,14 @@ NSTimer *launchTimer;
 @property(nonatomic, retain) NSString *bundleID;
 @property(nonatomic, retain) UIImageView *appIconView;
 @property(nonatomic, retain) NSTimer *launchTimer;
+@property(nonatomic, retain) UILabel *appLabel;
 
 // %new
 - (void)setColor:(UIColor *)arg0;
 - (void)launchApp;
+@end
+
+@interface LSApplicationProxy : NSObject
++ (id)applicationProxyForIdentifier:(id)arg1;
+- (NSString *)localizedNameForContext:(id)arg1;
 @end
