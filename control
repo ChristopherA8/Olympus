@@ -6,4 +6,4 @@ Description: Quick lockscreen app launcher
 Maintainer: Christopher Anderson
 Author: Christopher Anderson
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000)
+Depends: mobilesubstrate (>= 0.9.5000), ws.hbang.common (>= 1.17)

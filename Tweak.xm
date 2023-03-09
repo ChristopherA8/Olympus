@@ -1,23 +1,30 @@
+/* ====================================
+ *               Olympus
+ *         (a.k.a Swipey Reborn)
+ *
+ *              Developer -
+ *        Christopher Anderson
+ *
+ *               Credits -
+ *      Cynder (Preference Cells)
+ *      Donato Fiore (Major Help)
+ *     Ryan Nair (Prefrences Header)
+ * ==================================== */
+
 #import "Tweak.h"
 
-/*
-Rundown: we generate new lockscreen pages from an array of app bundle ids.
-*/
+%group Olympus
 
 // Cover Sheet page subclass
 // (https://theapplewiki.com/wiki/Dev:CSPageViewController)
 %subclass OlympusPageViewController : CSPageViewController
 %property(nonatomic, retain) NSString *bundleID;
 %property(nonatomic, retain) UIImageView *appIconView;
-%property(nonatomic, retain) NSTimer *launchTimer;
 %property(nonatomic, retain) UILabel *appLabel;
 
 // Used for scrolling date/time and other elements away when you swipe the page
 - (void)aggregateAppearance:(CSAppearance *)arg0 {
   %orig;
-
-  // CSComponent *pageControl =
-  //     [[%c(CSComponent) pageControl] hidden:YES];
   CSComponent *pageContent = [[%c(CSComponent) pageContent] flag:0];
   CSComponent *dateView = [[%c(CSComponent) dateView] hidden:YES];
   CSComponent *wallpaper = [[%c(CSComponent) wallpaper] hidden:NO];
@@ -30,12 +37,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   CSComponent *statusBar = [[%c(CSComponent) statusBar] hidden:YES];
   CSComponent *proudLock =
       [[[%c(CSComponent) proudLock] flag:1] hidden:YES];
-
-  // Usually uses CSBoundsWidth for CGPoint
-  // x value but the value seemed insanely high
-  // CSComponent *slideableContent = [%c(CSComponent)
-  // slideableContent]; [slideableContent setOffset:CGPointMake(10000000, 0.0)];
-
   CSComponent *tinting = [%c(CSComponent) tinting];
   [tinting setHidden:YES];
   CSComponent *statusBarBackground = [[[%c(CSComponent)
@@ -43,7 +44,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   [statusBarBackground setHidden:NO];
   CSComponent *quickActions =
       [[%c(CSComponent) quickActions] flag:0];
-  // [arg0 addComponent:pageControl];
   [arg0 addComponent:pageContent];
   [arg0 addComponent:dateView];
   [arg0 addComponent:wallpaper];
@@ -52,7 +52,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   [arg0 addComponent:controlCenterGrabber];
   [arg0 addComponent:statusBar];
   [arg0 addComponent:proudLock];
-  // [arg0 addComponent:slideableContent];
   [arg0 addComponent:tinting];
   [arg0 addComponent:statusBarBackground];
   [arg0 addComponent:quickActions];
@@ -81,7 +80,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
     [self.appIconView.heightAnchor constraintEqualToConstant:100],
   ]];
 
-  // add a toggle for app labels or nah
   self.appLabel = [[UILabel alloc] init];
   self.appLabel.translatesAutoresizingMaskIntoConstraints = NO;
   self.appLabel.text = [[LSApplicationProxy
@@ -143,8 +141,6 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   }
 }
 
-// When we swipe to a new page we want to cancel the last page's animation and
-// app launching
 - (void)viewWillDisappear:(BOOL)animated {
   %orig;
   [self.appIconView.layer removeAllAnimations];
@@ -176,16 +172,15 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 %end
 
 // This class in in charge of laying out the pages
-// The two default pages are the camera and main page with your notifications on
-// it
-// (the today view is a separate overlay now I think cause it's not in this
-// array)
-
+// Default Pages -
+//    CSMainPageContentViewController (page with notifications and date/time)
+//    SBDashBoardCameraPageViewController (provides access to the camera)
+// We remove the camera page and add our own pages (OlympusPageViewController)
 %hook CSCoverSheetViewController
 - (id)initWithPageViewControllers:(id)arg0
     mainPageContentViewController:(id)arg1
                           context:(id)arg2 {
-  // Lockscreen page array
+  // Create mutable array from lockscreen pages
   NSMutableArray *pages = [arg0 mutableCopy];
 
   // App bundle id array (will be provided by preference bundle)
@@ -196,8 +191,7 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
   if (apps.count == 0)
     return %orig;
 
-  // Remove the camera page (ig we don't have to do this, I can add an option
-  // for it)
+  // Remove the camera page
   [pages removeLastObject];
 
   // For each app bundleID create a new page
@@ -227,6 +221,16 @@ Rundown: we generate new lockscreen pages from an array of app bundle ids.
 }
 %end
 
+%end
+// Olympus Group
+
 // Preference values and setup
 %ctor {
+  preferences = [[HBPreferences alloc]
+      initWithIdentifier:@"com.christopher.olympusprefs"];
+  [preferences registerBool:&enabled default:YES forKey:@"enabled"];
+
+  if (enabled) {
+    %init(Olympus);
+  }
 }

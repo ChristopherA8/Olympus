@@ -1,9 +1,13 @@
 #import "Headers/CSBehavior.h"
 #import "Headers/CSComponent.h"
 #import "Headers/UIImage+appIcon.h"
+#import <Cephei/HBPreferences.h>
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+
+HBPreferences *preferences = nil;
+BOOL enabled;
 
 NSTimer *launchTimer;
 BOOL allowTodayView;
@@ -38,7 +42,6 @@ BOOL allowTodayView;
 // %property
 @property(nonatomic, retain) NSString *bundleID;
 @property(nonatomic, retain) UIImageView *appIconView;
-@property(nonatomic, retain) NSTimer *launchTimer;
 @property(nonatomic, retain) UILabel *appLabel;
 
 // %new
