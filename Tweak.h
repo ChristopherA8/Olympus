@@ -10,6 +10,8 @@ HBPreferences *preferences = nil;
 BOOL enabled;
 
 NSTimer *launchTimer;
+NSArray *appBundleIds;
+double launchTime;
 BOOL allowTodayView;
 
 @interface SBLockScreenManager

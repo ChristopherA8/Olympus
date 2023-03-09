@@ -13,6 +13,20 @@
 			<string>ChristopherA8</string>
 		</dict>
 		<dict>
+			<key>cellClass</key>
+			<string>KRTwitterCell2</string>
+			<key>label</key>
+			<string>Donato Fiore</string>
+			<key>accountName</key>
+			<string>thedonatofiore</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
+		</dict>
+		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>cellClass</key>
@@ -25,6 +39,49 @@
 			<string>enabled</string>
 			<key>label</key>
 			<string>Enable</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>OLYStepperTableCell</string>
+			<key>default</key>
+			<real>1.5</real>
+			<key>defaults</key>
+			<string>com.christopher.olympusprefs</string>
+			<key>key</key>
+			<string>launchTime</string>
+			<key>label</key>
+			<string>Wait %0.1f seconds</string>
+			<key>max</key>
+			<real>5</real>
+			<key>min</key>
+			<real>1</real>
+			<key>singularLabel</key>
+			<string>Wait 1 second</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>ATLApplicationListMultiSelectionController</string>
+			<key>defaults</key>
+			<string>com.christopher.olympusprefs</string>
+			<key>key</key>
+			<string>appBundleIds</string>
+			<key>label</key>
+			<string>Applications</string>
+			<key>sections</key>
+			<array>
+				<dict>
+					<key>sectionType</key>
+					<string>Visible</string>
+				</dict>
+			</array>
+			<key>showIdentifiersAsSubtitle</key>
+			<true/>
+			<key>defaultApplicationSwitchValue</key>
+			<false/>
+			<key>useSearchBar</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -41,14 +98,6 @@
 			<string>https://discord.gg/zHN7yuGqYr</string>
 			<key>action</key>
 			<string>discord</string>
-		</dict>
-		<dict>
-			<key>cellClass</key>
-			<string>HBLinkTableCell</string>
-			<key>label</key>
-			<string>PayPal</string>
-			<key>action</key>
-			<string>paypal</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>

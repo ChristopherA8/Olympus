@@ -104,7 +104,7 @@
   %orig;
   if (!arg0)
     return;
-  launchTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+  launchTimer = [NSTimer scheduledTimerWithTimeInterval:launchTime
                                                  target:self
                                                selector:@selector(launchApp)
                                                userInfo:nil
@@ -118,7 +118,7 @@
   [self.appIconView setAlpha:1.0];
   [self.appLabel setAlpha:1.0];
 
-  [UIView animateWithDuration:3.0
+  [UIView animateWithDuration:launchTime
                         delay:0
                       options:UIViewAnimationOptionCurveLinear
                    animations:^{
@@ -131,7 +131,7 @@
 - (void)viewDidAppear:(BOOL)animated {
   %orig;
   if (self.appIconView.alpha < 1.0 && self.appLabel.alpha < 1.0) {
-    [UIView animateWithDuration:3.0
+    [UIView animateWithDuration:launchTime
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
@@ -184,9 +184,7 @@
   NSMutableArray *pages = [arg0 mutableCopy];
 
   // App bundle id array (will be provided by preference bundle)
-  NSMutableArray *apps = [NSMutableArray arrayWithArray:@[
-    @"com.apple.mobiletimer", @"com.apple.Preferences", @"com.apple.news"
-  ]];
+  NSMutableArray *apps = [NSMutableArray arrayWithArray:appBundleIds];
 
   if (apps.count == 0)
     return %orig;
@@ -229,6 +227,8 @@
   preferences = [[HBPreferences alloc]
       initWithIdentifier:@"com.christopher.olympusprefs"];
   [preferences registerBool:&enabled default:YES forKey:@"enabled"];
+  [preferences registerDouble:&launchTime default:1.5 forKey:@"launchTime"];
+  [preferences registerObject:&appBundleIds default:@[] forKey:@"appBundleIds"];
 
   if (enabled) {
     %init(Olympus);

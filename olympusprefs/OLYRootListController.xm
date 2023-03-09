@@ -37,13 +37,6 @@
                            completionHandler:nil];
 }
 
-- (void)paypal {
-  NSURL *paypal = [NSURL URLWithString:@"https://paypal.me/Chr1sDev"];
-  [[UIApplication sharedApplication] openURL:paypal
-                                     options:@{}
-                           completionHandler:nil];
-}
-
 - (void)sourceCode {
   NSURL *source =
       [NSURL URLWithString:@"https://github.com/ChristopherA8/Olympus"];

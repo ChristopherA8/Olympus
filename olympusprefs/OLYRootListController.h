@@ -10,7 +10,6 @@
 @property(nonatomic, retain) UIBarButtonItem *respringButton;
 - (void)respring;
 - (void)discord;
-- (void)paypal;
 - (void)sourceCode;
 - (void)website;
 @end
