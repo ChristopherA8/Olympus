@@ -106,7 +106,7 @@
   %orig;
   if (!arg0)
     return;
-  launchTimer = [NSTimer scheduledTimerWithTimeInterval:launchTime
+  launchTimer = [NSTimer scheduledTimerWithTimeInterval:launchTime + 0.1
                                                  target:self
                                                selector:@selector(launchApp)
                                                userInfo:nil
@@ -121,8 +121,8 @@
   if (appLabels)
     [self.appLabel setAlpha:1.0];
 
-  [UIView animateWithDuration:launchTime
-                        delay:0
+  [UIView animateWithDuration:launchTime - 0.1
+                        delay:0.1
                       options:UIViewAnimationOptionCurveLinear
                    animations:^{
                      [self.appIconView setAlpha:0.0];
@@ -134,8 +134,8 @@
 - (void)viewDidAppear:(BOOL)animated {
   %orig;
   if (self.appIconView.alpha < 1.0 && self.appLabel.alpha < 1.0) {
-    [UIView animateWithDuration:launchTime
-                          delay:0
+    [UIView animateWithDuration:launchTime - 0.1
+                          delay:0.1
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                        [self.appIconView setAlpha:0.0];
