@@ -41,6 +41,20 @@
 			<string>Enable</string>
 		</dict>
 		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>cellClass</key>
+			<string>CAWSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.christopher.olympusprefs</string>
+			<key>key</key>
+			<string>appLabels</string>
+			<key>label</key>
+			<string>App Labels</string>
+		</dict>
+		<dict>
 			<key>cellClass</key>
 			<string>OLYStepperTableCell</string>
 			<key>default</key>

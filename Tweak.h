@@ -8,6 +8,7 @@
 
 HBPreferences *preferences = nil;
 BOOL enabled;
+BOOL appLabels;
 
 NSTimer *launchTimer;
 NSArray *appBundleIds;

@@ -87,6 +87,8 @@
   self.appLabel.textColor = [UIColor whiteColor];
   self.appLabel.textAlignment = NSTextAlignmentCenter;
   self.appLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightRegular];
+  if (!appLabels)
+    [self.appLabel setAlpha:0.0];
   [self.view addSubview:self.appLabel];
 
   [NSLayoutConstraint activateConstraints:@[
@@ -116,7 +118,8 @@
 
   allowTodayView = NO;
   [self.appIconView setAlpha:1.0];
-  [self.appLabel setAlpha:1.0];
+  if (appLabels)
+    [self.appLabel setAlpha:1.0];
 
   [UIView animateWithDuration:launchTime
                         delay:0
@@ -145,7 +148,8 @@
   %orig;
   [self.appIconView.layer removeAllAnimations];
   [self.appIconView setAlpha:1.0];
-  [self.appLabel setAlpha:1.0];
+  if (appLabels)
+    [self.appLabel setAlpha:1.0];
   [launchTimer invalidate];
   launchTimer = nil;
 }
@@ -227,6 +231,7 @@
   preferences = [[HBPreferences alloc]
       initWithIdentifier:@"com.christopher.olympusprefs"];
   [preferences registerBool:&enabled default:YES forKey:@"enabled"];
+  [preferences registerBool:&appLabels default:YES forKey:@"appLabels"];
   [preferences registerDouble:&launchTime default:1.5 forKey:@"launchTime"];
   [preferences registerObject:&appBundleIds default:@[] forKey:@"appBundleIds"];
 
