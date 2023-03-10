@@ -64,13 +64,13 @@
 			<key>key</key>
 			<string>launchTime</string>
 			<key>label</key>
-			<string>Wait %0.1f seconds</string>
+			<string>Launch delay %0.1f seconds</string>
 			<key>max</key>
 			<real>5</real>
 			<key>min</key>
 			<real>1</real>
 			<key>singularLabel</key>
-			<string>Wait 1 second</string>
+			<string>Launch delay 1 second</string>
 		</dict>
 		<dict>
 			<key>cell</key>
