@@ -1,6 +1,6 @@
 TARGET := iphone:clang:14.5
 INSTALL_TARGET_PROCESSES = SpringBoard
-export THEOS_DEVICE_IP=192.168.50.231
+export THEOS_DEVICE_IP=192.168.50.114
 
 include $(THEOS)/makefiles/common.mk
 
