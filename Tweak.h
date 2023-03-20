@@ -1,8 +1,10 @@
 #import "Headers/CSBehavior.h"
 #import "Headers/CSComponent.h"
 #import "Headers/UIImage+appIcon.h"
-#import <Cephei/HBPreferences.h>
+// #import <Cephei/HBPreferences.h> Luz shenanigans, this'll be uncommented in
+// the future
 #import <Foundation/Foundation.h>
+#import <HBPreferences.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
