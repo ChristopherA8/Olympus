@@ -16,7 +16,7 @@ meta = Meta(
 # define control options
 control = Control(
     maintainer="Christopher Anderson",
-    architecture="arm64 arm64e",
+    architecture="iphoneos-arm64",
     id="com.christopher.olympus",
     name="Olympus",
     author="Christopher Anderson",
