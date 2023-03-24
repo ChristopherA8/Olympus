@@ -6,7 +6,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Olympus
 
-$(TWEAK_NAME)_FILES = Tweak.xm
+$(TWEAK_NAME)_FILES = Tweak.x
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = SpringBoardFoundation MobileCoreServices
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc
 
