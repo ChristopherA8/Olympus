@@ -23,7 +23,7 @@ control = Control(
     description="Quick lockscreen app launcher",
     section="Tweaks",
     version="1.0.0-beta2",
-    depends="firmware (>= 15.0), mobilesubstrate",  # add rootless preference loader ??
+    depends="firmware (>= 15.0), mobilesubstrate, preferenceloader"
 )
 
 # define modules
@@ -34,8 +34,7 @@ modules = [
         name="Olympus",
         private_frameworks=["SpringBoardFoundation", "MobileCoreServices"],
         framework_dirs=["~/.luz/vendor/lib"],
-        frameworks=["UIKit", "Cephei"],
-        include_dirs=["~/.luz/vendor/lib/Cephei.framework/Headers"],
+        frameworks=["UIKit"]
     )
 ]
 

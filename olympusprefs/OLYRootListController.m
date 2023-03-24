@@ -1,5 +1,4 @@
 #import "OLYRootListController.h"
-#import <Foundation/Foundation.h>
 
 @implementation OLYRootListController
 
@@ -53,3 +52,32 @@
 }
 
 @end
+
+
+/*
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>ATLApplicationListMultiSelectionController</string>
+			<key>defaults</key>
+			<string>com.christopher.olympusprefs</string>
+			<key>key</key>
+			<string>appBundleIds</string>
+			<key>label</key>
+			<string>Applications</string>
+			<key>sections</key>
+			<array>
+				<dict>
+					<key>sectionType</key>
+					<string>Visible</string>
+				</dict>
+			</array>
+			<key>showIdentifiersAsSubtitle</key>
+			<true/>
+			<key>defaultApplicationSwitchValue</key>
+			<false/>
+			<key>useSearchBar</key>
+			<true/>
+		</dict>
+*/

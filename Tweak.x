@@ -226,14 +226,17 @@
 %end
 // Olympus Group
 
-// Preference values and setup
+static void loadPreferences() {
+  CFPreferencesAppSynchronize(CFSTR("com.christopher.Olympus"));
+  enabled = !CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR("com.christopher.Olympus")) ? YES : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("enabled"), CFSTR("com.christopher.Olympus")) boolValue];
+  appLabels = !CFPreferencesCopyAppValue(CFSTR("appLabels"), CFSTR("com.christopher.Olympus")) ? YES : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("appLabels"), CFSTR("com.christopher.Olympus")) boolValue];
+  launchTime = !CFPreferencesCopyAppValue(CFSTR("launchTime"), CFSTR("com.christopher.Olympus")) ? 1.5 : [(__bridge id)CFPreferencesCopyAppValue(CFSTR("launchTime"), CFSTR("com.christopher.Olympus")) doubleValue];
+  // appBundleIds = !CFPreferencesCopyAppValue(CFSTR("appBundleIds"), CFSTR("com.christopher.Olympus")) ? @[] : (__bridge NSArray *)CFPreferencesCopyAppValue(CFSTR("appBundleIds"), CFSTR("com.christopher.Olympus"));
+}
+
 %ctor {
-  preferences = [[HBPreferences alloc]
-      initWithIdentifier:@"com.christopher.olympusprefs"];
-  [preferences registerBool:&enabled default:YES forKey:@"enabled"];
-  [preferences registerBool:&appLabels default:YES forKey:@"appLabels"];
-  [preferences registerDouble:&launchTime default:1.5 forKey:@"launchTime"];
-  [preferences registerObject:&appBundleIds default:@[] forKey:@"appBundleIds"];
+  loadPreferences();
+  appBundleIds = @[@"com.apple.MobileSMS", @"com.apple.MobileTimer", @"com.apple.news"];
 
   if (enabled) {
     %init(Olympus);

@@ -8,7 +8,6 @@ TWEAK_NAME = Olympus
 
 $(TWEAK_NAME)_FILES = Tweak.xm
 $(TWEAK_NAME)_PRIVATE_FRAMEWORKS = SpringBoardFoundation MobileCoreServices
-$(TWEAK_NAME)_EXTRA_FRAMEWORKS = Cephei
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
