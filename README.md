@@ -15,4 +15,4 @@
 </p>
 <div class="clear"></div>
 
-<img src="/assets/tweak_demo.gif?raw=true" width="300px>
+![](https://github.com/ChristopherA8/Olympus/blob/main/assets/tweak_demo.gif)
