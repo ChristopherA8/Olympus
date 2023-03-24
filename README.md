@@ -2,7 +2,7 @@
 	<source media="(prefers-color-scheme: light)" srcset="https://repo.chr1s.dev/assets/Olympus/banner_dark-min.png">
 	<img align="left" height="120" src="https://repo.chr1s.dev/assets/Olympus/banner_light-min.png" alt="Olympus logo" style="float: left;"/>
 </picture>
-<h3 align="right">An iOS 14.x-16.x lockscreen app launcher<br></h3> 
+<h3 align="right">An iOS 14.x-16.x lockscreen app launcher, <br>built with Luz</h3> 
 
 <p align="right" >
   <strong><a href="placeholder">Havoc</a></strong>
@@ -15,4 +15,4 @@
 </p>
 <div class="clear"></div>
 
-## This is the rootless version for devices using palera1n
+## Rootless version for devices using palera1n
