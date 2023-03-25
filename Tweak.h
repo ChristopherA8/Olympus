@@ -2,7 +2,7 @@
 #import "Headers/CSComponent.h"
 #import "Headers/UIImage+appIcon.h"
 #import <Foundation/Foundation.h>
-#import <Cephei/HBPreferences.h>
+#import <HBPreferences.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
