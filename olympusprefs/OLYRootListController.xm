@@ -29,7 +29,7 @@
     //                                     UIViewAutoresizingFlexibleRightMargin);
     headerImageView.image = [UIImage
         imageWithContentsOfFile:
-            @"/Library/PreferenceBundles/olympusprefs.bundle/banner_pic-min.png"];
+            @"/var/jb/Library/PreferenceBundles/olympusprefs.bundle/banner_pic-min.png"];
     headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.headerView addSubview:headerImageView];
 
