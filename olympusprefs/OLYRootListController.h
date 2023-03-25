@@ -8,6 +8,7 @@
 
 @interface OLYRootListController : PSListController
 @property(nonatomic, retain) UIBarButtonItem *respringButton;
+@property (nonatomic, retain) UIView *headerView;
 - (void)respring;
 - (void)discord;
 - (void)sourceCode;
